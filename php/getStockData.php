@@ -4,10 +4,10 @@ class Process extends Database
 {
 	public function getStockData($stockname,$fromdate,$todate)
 	{
-		$stmt1 = $this->conn->prepare('SELECT price,stock_date from stock_details WHERE name = ? AND stock_date BETWEEN ? AND ? ORDER BY stock_date');
-		$stmt1->bind_param('sss', $stockname,$fromdate,$todate);
-		$stmt1->execute();
-		$result = $stmt1->get_result();
+		$getStockData = $this->conn->prepare('SELECT price,stock_date from stock_details WHERE name = ? AND stock_date BETWEEN ? AND ? ORDER BY stock_date');
+		$getStockData->bind_param('sss', $stockname,$fromdate,$todate);
+		$getStockData->execute();
+		$result = $getStockData->get_result();
 		$key=1;
 		$sumOfPrice = $maxPrice = $maxPriceDate = $minPrice = $minPriceDate = 0;
 		$dataForChart = $dataForCalc = array();
@@ -41,10 +41,10 @@ class Process extends Database
 	public function getTransactionData($stockname,$fromdate,$todate)
 	{
 		$type='Sold';
-		$stmt1 = $this->conn->prepare('SELECT t1.bought_price,t1.sold_price,t1.quantity,t1.transaction_date,t2.transaction_date as bought_date from stock_transactions t1, stock_transactions t2 WHERE t1.name = ? AND t1.type = ? AND t1.bought_id = t2.id AND t1.transaction_date BETWEEN ? AND ? ORDER BY transaction_date');
-		$stmt1->bind_param('ssss', $stockname,$type,$fromdate,$todate);
-		$stmt1->execute();
-		$result = $stmt1->get_result();
+		$getTransactionData = $this->conn->prepare('SELECT t1.bought_price,t1.sold_price,t1.quantity,t1.transaction_date,t2.transaction_date as bought_date from stock_transactions t1, stock_transactions t2 WHERE t1.name = ? AND t1.type = ? AND t1.bought_id = t2.id AND t1.transaction_date BETWEEN ? AND ? ORDER BY transaction_date');
+		$getTransactionData->bind_param('ssss', $stockname,$type,$fromdate,$todate);
+		$getTransactionData->execute();
+		$result = $getTransactionData->get_result();
 		$key=1;
 		$totalProfit = 0;
 		$dataForProfit = array();
@@ -72,13 +72,6 @@ class Process extends Database
 			$dataForProfit[$key]['percent']=$percent;
 			$dataForProfit[$key]['total']=$total;
 			$key++;
-		}
-		if(empty($dataForProfit)){
-			echo "<script type=\"text/javascript\">
-			 alert(\"No record found for the given date. Please change the date range and try again.\");
-			  window.location = \"../StockAnalysis/index.php\"
-			  </script>"; 
-			  exit();
 		}
 		return array('dataForProfit'=>$dataForProfit,'totalProfit'=>$totalProfit);
 	}

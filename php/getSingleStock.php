@@ -3,10 +3,10 @@
 	{
 		public function get_stockDetails( $stockID )
 		{
-			$stmt = $this->conn->prepare( 'SELECT id,name,price,stock_date FROM stock_details WHERE id = ?' );
-			$stmt->bind_param( 's', $stockID );
-			$stmt->execute();
-			$result = $stmt->get_result();
+			$getStockDetails = $this->conn->prepare( 'SELECT id,name,price,stock_date FROM stock_details WHERE id = ?' );
+			$getStockDetails->bind_param( 's', $stockID );
+			$getStockDetails->execute();
+			$result = $getStockDetails->get_result();
 			$row = $result->fetch_row();
 			return $row;
 		}

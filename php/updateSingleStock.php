@@ -5,10 +5,10 @@
 	{
 		public function verify_stockDetails( $stockName, $stockDate )
 		{
-			$stmt = $this->conn->prepare( 'SELECT COUNT(id) FROM stock_details WHERE name=? and stock_date=? LIMIT 1' );
-			$stmt->bind_param( 'sss', $stockName, $stockDate );
-			$stmt->execute();
-			$result = $stmt->get_result();
+			$verifyStockDetails = $this->conn->prepare( 'SELECT COUNT(id) FROM stock_details WHERE name=? and stock_date=? LIMIT 1' );
+			$verifyStockDetails->bind_param( 'ss', $stockName, $stockDate );
+			$verifyStockDetails->execute();
+			$result = $verifyStockDetails->get_result();
 			$row = $result->fetch_row();
 			if ( $row[ 0 ] > 0 ) {
 				return "already_exists";
@@ -17,9 +17,9 @@
 
 		public function update_stockDetails( $id, $name, $price, $date )
 		{
-			$stmt = $this->conn->prepare( 'UPDATE stock_details SET name = ?,price = ?,stock_date = ? WHERE id = ?' );
-			$stmt->bind_param( 'ssss', $name, $price, $date, $id );
-			if ( $stmt->execute() ) {
+			$updateStockDetails = $this->conn->prepare( 'UPDATE stock_details SET name = ?,price = ?,stock_date = ? WHERE id = ?' );
+			$updateStockDetails->bind_param( 'ssss', $name, $price, $date, $id );
+			if ( $updateStockDetails->execute() ) {
 				return "Update Successful";
 			}
 		}

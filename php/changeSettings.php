@@ -5,9 +5,9 @@
 	{
 		public function updateSetting( $id, $value )
 		{
-			$stmt1 = $this->conn->prepare( 'UPDATE settings SET setting_value = ? WHERE id = ?' );
-			$stmt1->bind_param( 'ss', $value, $id );
-			if ( $stmt1->execute() ) {
+			$updateSetting = $this->conn->prepare( 'UPDATE settings SET setting_value = ? WHERE id = ?' );
+			$updateSetting->bind_param( 'ss', $value, $id );
+			if ( $updateSetting->execute() ) {
 				return "Updation Successful";
 			}
 		}

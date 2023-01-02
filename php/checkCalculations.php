@@ -3,9 +3,9 @@
 	{
 		public function get_stockDetailsToBuy()
 		{
-			$stmt = $this->conn->prepare( 'SELECT id,name,price,MAX(stock_date) FROM stock_details GROUP BY name' );
-			$stmt->execute();
-			$result = $stmt->get_result();
+			$getStockDetailsToBuy = $this->conn->prepare( 'SELECT id,name,price,MAX(stock_date) FROM stock_details GROUP BY name' );
+			$getStockDetailsToBuy->execute();
+			$result = $getStockDetailsToBuy->get_result();
 			return $result;
 		}
 

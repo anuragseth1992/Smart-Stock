@@ -5,10 +5,10 @@
 	{
 		public function verify_stockDetails( $stockName, $stockPrice, $stockDate )
 		{
-			$stmt = $this->conn->prepare( 'SELECT COUNT(id) FROM stock_details WHERE name=? and price=? and stock_date=? LIMIT 1' );
-			$stmt->bind_param( 'sss', $stockName, $stockPrice, $stockDate );
-			$stmt->execute();
-			$result = $stmt->get_result();
+			$verifyStockDetails = $this->conn->prepare( 'SELECT COUNT(id) FROM stock_details WHERE name=? and price=? and stock_date=? LIMIT 1' );
+			$verifyStockDetails->bind_param( 'sss', $stockName, $stockPrice, $stockDate );
+			$verifyStockDetails->execute();
+			$result = $verifyStockDetails->get_result();
 			$row = $result->fetch_row();
 			if ( $row[ 0 ] > 0 ) {
 				return "already_exists";
@@ -16,9 +16,9 @@
 		}
 		public function insert_stockDetails( $name, $price, $date )
 		{
-			$stmt = $this->conn->prepare( 'INSERT INTO stock_details(name,price,stock_date) values (?,?,?)' );
-			$stmt->bind_param( 'sss', $name, $price, $date );
-			if ( $stmt->execute() ) {
+			$insertStockDetails = $this->conn->prepare( 'INSERT INTO stock_details(name,price,stock_date) values (?,?,?)' );
+			$insertStockDetails->bind_param( 'sss', $name, $price, $date );
+			if ( $insertStockDetails->execute() ) {
 				return "Insertion Successful";
 			}
 		}
@@ -27,19 +27,19 @@
 		{
 			$insertionSuccessful = true;
 			foreach ( $insertData as $val ) {
-				$stmt = $this->conn->prepare( 'SELECT COUNT(id) FROM stock_details WHERE name=? and price=? and stock_date=? LIMIT 1' );
-				$stmt->bind_param( 'sss', $val[ 'name' ], $val[ 'price' ], $val[ 'stockDate' ] );
-				$stmt->execute();
-				$result = $stmt->get_result();
+				$checkStockDetails = $this->conn->prepare( 'SELECT COUNT(id) FROM stock_details WHERE name=? and price=? and stock_date=? LIMIT 1' );
+				$checkStockDetails->bind_param( 'sss', $val[ 'name' ], $val[ 'price' ], $val[ 'stockDate' ] );
+				$checkStockDetails->execute();
+				$result = $checkStockDetails->get_result();
 				$row = $result->fetch_row();
 				if ( $row[ 0 ] == 0 ) {
 					$statement = "INSERT INTO stock_details (name,price,stock_date) VALUES (?,?,?)";
-					$stmt = $this->conn->prepare( $statement );
-					$stmt->bind_param( 'sss', $val[ 'name' ], $val[ 'price' ], $val[ 'stockDate' ] );
-					if ( !$stmt->execute() ) {
+					$insertStockDetails = $this->conn->prepare( $statement );
+					$insertStockDetails->bind_param( 'sss', $val[ 'name' ], $val[ 'price' ], $val[ 'stockDate' ] );
+					if ( !$insertStockDetails->execute() ) {
 						$insertionSuccessful = false;
 					}
-					$stmt->close();
+					$insertStockDetails->close();
 				}
 			}
 			if ( $insertionSuccessful ) {

@@ -4,9 +4,9 @@
 		public function get_inventoryDetails()
 		{
 			$currentDate = date( 'Y-m-d' );
-			$stmt = $this->conn->prepare( 'SELECT name,transaction_date,bought_price, remaining_quantity FROM stock_transactions WHERE type = "Bought"' );
-			$stmt->execute();
-			$result = $stmt->get_result();
+			$getInventoryDetails = $this->conn->prepare( 'SELECT name,transaction_date,bought_price, remaining_quantity FROM stock_transactions WHERE type = "Bought"' );
+			$getInventoryDetails->execute();
+			$result = $getInventoryDetails->get_result();
 			return $result;
 		}
 	}

@@ -13,14 +13,14 @@
 			$row_checkSetting = $result_checkSetting->fetch_row();
 			$currentDate = date( 'Y-m-d' );
 			if ( $row_checkSetting[ 0 ] != 0 ) {
-				$stmt = $this->conn->prepare( 'SELECT COUNT(id) FROM stock_transactions WHERE transaction_date = ? AND name = ?' );
-				$stmt->bind_param( 'ss', $currentDate, $stockName );
+				$checkTransactionLimit = $this->conn->prepare( 'SELECT COUNT(id) FROM stock_transactions WHERE transaction_date = ? AND name = ?' );
+				$checkTransactionLimit->bind_param( 'ss', $currentDate, $stockName );
 			} else {
-				$stmt = $this->conn->prepare( 'SELECT COUNT(id) FROM stock_transactions WHERE transaction_date = ?' );
-				$stmt->bind_param( 's', $currentDate );
+				$checkTransactionLimit = $this->conn->prepare( 'SELECT COUNT(id) FROM stock_transactions WHERE transaction_date = ?' );
+				$checkTransactionLimit->bind_param( 's', $currentDate );
 			}
-			$stmt->execute();
-			$result = $stmt->get_result();
+			$checkTransactionLimit->execute();
+			$result = $checkTransactionLimit->get_result();
 			$row = $result->fetch_row();
 			if ( $row[ 0 ] > 0 ) {
 				return "Transaction Done";
@@ -33,14 +33,10 @@
 		{
 			$currentDate = date( 'Y-m-d' );
 			$type = 'Bought';
-			$stmt = $this->conn->prepare( 'INSERT INTO stock_transactions(type,name,bought_price,quantity,remaining_quantity,transaction_date) values (?,?,?,?,?,?)' );
-			$stmt->bind_param( 'ssssss', $type, $name, $price, $quantity, $quantity, $currentDate );
-			if ( $stmt->execute() ) {
-				$stmt1 = $this->conn->prepare( 'UPDATE stock_inventories SET quantity = quantity + ' . $quantity . ' WHERE name = ?' );
-				$stmt1->bind_param( 's', $name );
-				if ( $stmt1->execute() ) {
-					return "Insertion Successful";
-				}
+			$buyStock = $this->conn->prepare( 'INSERT INTO stock_transactions(type,name,bought_price,quantity,remaining_quantity,transaction_date) values (?,?,?,?,?,?)' );
+			$buyStock->bind_param( 'ssssss', $type, $name, $price, $quantity, $quantity, $currentDate );
+			if ( $buyStock->execute() ) {
+				return "Insertion Successful";
 			}
 		}
 
@@ -48,17 +44,13 @@
 		{
 			$currentDate = date( 'Y-m-d' );
 			$type = 'Sold';
-			$stmt = $this->conn->prepare( 'INSERT INTO stock_transactions(type,name,bought_price,sold_price,quantity,bought_id,transaction_date) values (?,?,?,?,?,?,?)' );
-			$stmt->bind_param( 'sssssss', $type, $name, $boughtPrice, $sellingPrice, $quantity, $boughtID, $currentDate );
-			if ( $stmt->execute() ) {
-				$stmt1 = $this->conn->prepare( 'UPDATE stock_transactions SET remaining_quantity = quantity - remaining_quantity + ' . $quantity . ' WHERE id = ?' );
-				$stmt1->bind_param( 's', $boughtID );
-				if ( $stmt1->execute() ) {
-					$stmt2 = $this->conn->prepare( 'UPDATE stock_inventories SET quantity = quantity - ' . $quantity . ' WHERE name = ?' );
-					$stmt2->bind_param( 's', $name );
-					if ( $stmt2->execute() ) {
-						return "Insertion Successful";
-					}
+			$sellStock = $this->conn->prepare( 'INSERT INTO stock_transactions(type,name,bought_price,sold_price,quantity,bought_id,transaction_date) values (?,?,?,?,?,?,?)' );
+			$sellStock->bind_param( 'sssssss', $type, $name, $boughtPrice, $sellingPrice, $quantity, $boughtID, $currentDate );
+			if ( $sellStock->execute() ) {
+				$updateOldTransaction = $this->conn->prepare( 'UPDATE stock_transactions SET remaining_quantity = quantity - remaining_quantity + ' . $quantity . ' WHERE id = ?' );
+				$updateOldTransaction->bind_param( 's', $boughtID );
+				if ( $updateOldTransaction->execute() ) {
+					return "Insertion Successful";
 				}
 			}
 		}
