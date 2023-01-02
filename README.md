@@ -15,12 +15,13 @@ Submodules and its features:
 3. <b>Reports(Inventory/Transaction):</b> This module is used to show inventory lot(date) wise for each stock and transaction report shows the purchase and selling off details of the stocks.
 4. <b>Setting:</b> This contains a setting which allows the number of transactions at a time(stock wise) and the same is reflected on the buying stock and selling stock feature.
 5. <b>Stock Analysis:</b> Here one can select the stock name and determine the date range the stock has to be analysed. The dashboard appears where the analysis like below would be displayed:
-a) Profit
-b) Mean
-c) Standard Deviation
-d) Best date to buy stock
-e) Best date to sell stock
-f) Transaction wise profit/loss incurred.
-
+<ul>
+<li>a) Profit</li>
+<li>b) Mean</li>
+<li>c) Standard Deviation</li>
+<li>d) Best date to buy stock</li>
+<li>e) Best date to sell stock</li>
+<li>f) Transaction wise profit/loss incurred.</li>
+</ul>
 
 
