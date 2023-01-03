@@ -2,7 +2,7 @@
 This module helps the user to identify dates when the stock can be bought and sold. 
 Assumptions: Any Backend server (LAMP,WAMP,XAMPP or anything similar) is up and running.
 To set this up please follow the following steps:
-1. The smart_stock.sql file should first be imported to the database (db name: 'smart_stock').
+1. The smart_stock.sql file should first be imported to the database (db name: 'smart_stock').(If sample data is needed one can use smart_stock_with_sample_data.sql instead)
 2. Take pull of the code(or download) on the folder which projects the same on the http:// request on the browser. (within htdocs in case of XAMPP)
 3. Open the file connection.php within db folder and change the username and password accordingly.
 4. On the browser(preferrably Chrome) please open the localhost(depends on each server)/SmartStock.
