@@ -27,13 +27,13 @@ class Process extends Database
 			}
 			$key++;
 		}
-		if(empty($dataForChart)){
+		/*if(empty($dataForChart)){
 			echo "<script type=\"text/javascript\">
 			 alert(\"No stock detail record found for the given date. Please change the date range and try again.\");
 			  window.location = \"../StockAnalysis/index.php\"
 			  </script>"; 
 			  exit();
-		}		
+		}	*/	
 		return array('ChartDetailData'=>$dataForChart,'CalcData'=>$dataForCalc,'SumOfPrice'=>$sumOfPrice,'maxPrice'=>$maxPrice,'maxPriceDate'=>$maxPriceDate,'minPrice'=>$minPrice,'minPriceDate'=>$minPriceDate);
 	}
 	
@@ -82,21 +82,23 @@ if(isset($_POST['analyseStock'])){
 		$dateRange =explode('-',$_POST['dateRange']);
 		$fromDate = date("Y-m-d", strtotime($dateRange[0]));
 		$toDate = date("Y-m-d", strtotime($dateRange[1]));
+		$calculatedMean = $avgOfDeviationSquaredSum = $deviationSquaredSum = 0;
+		$getChartDetailDate = $getChartDetailPrice = array();
 		$getProfitData = $obj->getTransactionData($stockName, $fromDate, $toDate );
 		$getStockData = $obj->getStockData($stockName, $fromDate, $toDate );
-		$calculatedMean = $getStockData['SumOfPrice']/count($getStockData['ChartDetailData']);
-		$deviationSquaredSum = 0;
-		foreach($getStockData['CalcData'] as $value){
-			$deviation = (float)$value['price'] - $calculatedMean;
-			$deviationSquaredSum += $deviation*$deviation;
-		}
-		$avgOfDeviationSquaredSum = $deviationSquaredSum / count($getStockData['ChartDetailData']);
-		$standardDeviation = round(sqrt($avgOfDeviationSquaredSum), 2);
-		$getChartDetailDate = $getChartDetailPrice = array();
-		foreach($getStockData['ChartDetailData'] as $value){
-			$getChartDetailDate[]=date("d-m", strtotime($value['date']));;
-			$getChartDetailPrice[]=$value['price'];
-		}
+		if(!empty($getStockData['ChartDetailData'])){
+			$calculatedMean = $getStockData['SumOfPrice']/count($getStockData['ChartDetailData']);
+			foreach($getStockData['CalcData'] as $value){
+				$deviation = (float)$value['price'] - $calculatedMean;
+				$deviationSquaredSum += $deviation*$deviation;
+			}
+			$avgOfDeviationSquaredSum = $deviationSquaredSum / count($getStockData['ChartDetailData']);
+			$standardDeviation = round(sqrt($avgOfDeviationSquaredSum), 2);
+			foreach($getStockData['ChartDetailData'] as $value){
+				$getChartDetailDate[]=date("d-m", strtotime($value['date']));;
+				$getChartDetailPrice[]=$value['price'];
+			}
+		}		
 	} else {
 		echo "<script type=\"text/javascript\">
 			  alert(\"Invalid Access\");
