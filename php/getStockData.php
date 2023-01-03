@@ -91,7 +91,7 @@ if(isset($_POST['analyseStock'])){
 			$deviationSquaredSum += $deviation*$deviation;
 		}
 		$avgOfDeviationSquaredSum = $deviationSquaredSum / count($getStockData['ChartDetailData']);
-		$standardDeviation = sqrt($avgOfDeviationSquaredSum);
+		$standardDeviation = round(sqrt($avgOfDeviationSquaredSum), 2);
 		$getChartDetailDate = $getChartDetailPrice = array();
 		foreach($getStockData['ChartDetailData'] as $value){
 			$getChartDetailDate[]=date("d-m", strtotime($value['date']));;
