@@ -3,7 +3,7 @@
 	{
 		public function get_stockDetailsToBuy()
 		{
-			$getStockDetails = $this->conn->prepare( 'SELECT id,name,price,MAX(stock_date) FROM stock_details GROUP BY name' );
+			$getStockDetails = $this->conn->prepare( 'SELECT id,name,price,MAX(stock_date) FROM stock_details GROUP BY name ORDER BY id DESC' );
 			$getStockDetails->execute();
 			$result = $getStockDetails->get_result();
 			return $result;
@@ -13,7 +13,7 @@
 		{
 			$currentDate = date( 'Y-m-d' );
 			$stockDetailsArray = $responseArray = array();
-			$getInventory = $this->conn->prepare( 'SELECT id,name,bought_price,remaining_quantity FROM stock_transactions where type = "Bought" and remaining_quantity > 0' );
+			$getInventory = $this->conn->prepare( 'SELECT id,name,bought_price,remaining_quantity FROM stock_transactions where type = "Bought" and remaining_quantity > 0 ORDER BY id DESC' );
 			$getInventory->execute();
 			$result_getInventory = $getInventory->get_result();
 			$getStockDetails = $this->conn->prepare( 'SELECT id,name,price FROM stock_details' );
