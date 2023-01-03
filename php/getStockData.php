@@ -29,12 +29,11 @@ class Process extends Database
 		}
 		if(empty($dataForChart)){
 			echo "<script type=\"text/javascript\">
-			 alert(\"No record found for the given date. Please change the date range and try again.\");
+			 alert(\"No stock detail record found for the given date. Please change the date range and try again.\");
 			  window.location = \"../StockAnalysis/index.php\"
 			  </script>"; 
 			  exit();
-		}
-		
+		}		
 		return array('ChartDetailData'=>$dataForChart,'CalcData'=>$dataForCalc,'SumOfPrice'=>$sumOfPrice,'maxPrice'=>$maxPrice,'maxPriceDate'=>$maxPriceDate,'minPrice'=>$minPrice,'minPriceDate'=>$minPriceDate);
 	}
 	
@@ -98,5 +97,10 @@ if(isset($_POST['analyseStock'])){
 			$getChartDetailDate[]=date("d-m", strtotime($value['date']));;
 			$getChartDetailPrice[]=$value['price'];
 		}
+	} else {
+		echo "<script type=\"text/javascript\">
+			  alert(\"Invalid Access\");
+			  window.location = \"../StockAnalysis/index.php\"
+			  </script>";
 	}
 ?>

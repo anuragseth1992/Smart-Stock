@@ -3,7 +3,9 @@
 	{
 		public function get_stockDetailsToBuy()
 		{
-			$getStockDetails = $this->conn->prepare( 'SELECT id,name,price,MAX(stock_date) FROM stock_details GROUP BY name ORDER BY id DESC' );
+			$isActive = 1;
+			$getStockDetails = $this->conn->prepare( 'SELECT id,name,price,stock_date FROM stock_details WHERE is_active = ? GROUP BY name' );
+			$getStockDetails->bind_param( 's', $isActive );
 			$getStockDetails->execute();
 			$result = $getStockDetails->get_result();
 			return $result;

@@ -19,13 +19,19 @@
 			$insertStockDetails = $this->conn->prepare( 'INSERT INTO stock_details(name,price,stock_date) values (?,?,?)' );
 			$insertStockDetails->bind_param( 'sss', $name, $price, $date );
 			if ( $insertStockDetails->execute() ) {
-				return "Insertion Successful";
+				$isActive = 0;
+				$updateStockDetails = $this->conn->prepare( 'UPDATE stock_details SET is_active = ? WHERE name = ? AND stock_date != (select MAX(stock_date) FROM stock_details WHERE name = ?)' );
+				$updateStockDetails->bind_param( 'sss', $isActive, $name, $name );
+				if ( $updateStockDetails->execute() ) {
+					return "Insertion Successful";
+				}
 			}
 		}
 
 		public function insert_bulk_stockDetails( $insertData )
 		{
 			$insertionSuccessful = true;
+			$isActive = 0;
 			foreach ( $insertData as $val ) {
 				$checkStockDetails = $this->conn->prepare( 'SELECT COUNT(id) FROM stock_details WHERE name=? and price=? and stock_date=? LIMIT 1' );
 				$checkStockDetails->bind_param( 'sss', $val[ 'name' ], $val[ 'price' ], $val[ 'stockDate' ] );
@@ -38,6 +44,12 @@
 					$insertStockDetails->bind_param( 'sss', $val[ 'name' ], $val[ 'price' ], $val[ 'stockDate' ] );
 					if ( !$insertStockDetails->execute() ) {
 						$insertionSuccessful = false;
+					} else {
+						$updateStockDetails = $this->conn->prepare( 'UPDATE stock_details SET is_active = ? WHERE name = ? AND stock_date != (select MAX(stock_date) FROM stock_details WHERE name = ?)' );
+						$updateStockDetails->bind_param( 'sss', $isActive, $val[ 'name' ], $val[ 'name' ] );
+						if ( !$updateStockDetails->execute() ) {
+							$insertionSuccessful = false;
+						}
 					}
 					$insertStockDetails->close();
 				}

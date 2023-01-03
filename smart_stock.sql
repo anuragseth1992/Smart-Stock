@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 03, 2023 at 06:08 AM
+-- Generation Time: Jan 03, 2023 at 07:39 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.26
 
@@ -55,6 +55,7 @@ CREATE TABLE `stock_details` (
   `name` varchar(11) NOT NULL,
   `price` varchar(11) NOT NULL,
   `stock_date` date NOT NULL,
+  `is_active` tinyint(4) NOT NULL DEFAULT 1,
   `created` timestamp NOT NULL DEFAULT current_timestamp(),
   `modified` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -115,13 +116,13 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `stock_details`
 --
 ALTER TABLE `stock_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=169;
 
 --
 -- AUTO_INCREMENT for table `stock_transactions`
 --
 ALTER TABLE `stock_transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

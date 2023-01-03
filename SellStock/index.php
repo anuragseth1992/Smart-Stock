@@ -74,7 +74,7 @@
 												<td>$boughtPrice/-</td>
 												<td>$sellingPrice/-</td>
 												<td>$inventory</td>
-												<td><input type='number' name='stockQuantity' required/></td>
+												<td><input type='number' name='stockQuantity' min='0' max='$inventory' required/></td>
 												<td><button type='submit' name='sellStock' class='btn btn-success'>Sell</button>
 												</form>
 											</tr>

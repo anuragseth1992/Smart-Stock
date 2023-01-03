@@ -17,10 +17,16 @@
 
 		public function update_stockDetails( $id, $name, $price, $date )
 		{
-			$updateStockDetails = $this->conn->prepare( 'UPDATE stock_details SET name = ?,price = ?,stock_date = ? WHERE id = ?' );
-			$updateStockDetails->bind_param( 'ssss', $name, $price, $date, $id );
+			$isActive = 1;
+			$updateStockDetails = $this->conn->prepare( 'UPDATE stock_details SET name = ?,price = ?,stock_date = ?,is_active = ? WHERE id = ?' );
+			$updateStockDetails->bind_param( 'sssss', $name, $price, $date, $isActive, $id );
 			if ( $updateStockDetails->execute() ) {
-				return "Update Successful";
+				$isActive = 0;
+				$updateStockDetails = $this->conn->prepare( 'UPDATE stock_details SET is_active = ? WHERE name = ? AND stock_date != (select MAX(stock_date) FROM stock_details WHERE name = ?)' );
+				$updateStockDetails->bind_param( 'sss', $isActive, $name, $name );
+				if ( $updateStockDetails->execute() ) {
+					return "Update Successful";
+				}				
 			}
 		}
 	}

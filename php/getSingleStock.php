@@ -19,7 +19,7 @@
 	} else {
 		echo "<script type=\"text/javascript\">
 			  alert(\"Invalid Access\");
-			  window.location = \"../UpdateStocks/index.php\"
+			  window.location = \"../ViewStocks/index.php\"
 			  </script>";
 	}
 ?>

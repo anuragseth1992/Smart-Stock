@@ -47,7 +47,7 @@
 			$sellStock = $this->conn->prepare( 'INSERT INTO stock_transactions(type,name,bought_price,sold_price,quantity,bought_id,transaction_date) values (?,?,?,?,?,?,?)' );
 			$sellStock->bind_param( 'sssssss', $type, $name, $boughtPrice, $sellingPrice, $quantity, $boughtID, $currentDate );
 			if ( $sellStock->execute() ) {
-				$updateOldTransaction = $this->conn->prepare( 'UPDATE stock_transactions SET remaining_quantity = (quantity - remaining_quantity - ?) WHERE id = ?' );
+				$updateOldTransaction = $this->conn->prepare( 'UPDATE stock_transactions SET remaining_quantity = (remaining_quantity - ?) WHERE id = ?' );
 				$updateOldTransaction->bind_param( 'ss', $quantity, $boughtID );
 				if ( $updateOldTransaction->execute() ) {
 					return "Insertion Successful";
