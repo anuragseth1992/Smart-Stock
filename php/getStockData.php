@@ -27,13 +27,6 @@ class Process extends Database
 			}
 			$key++;
 		}
-		/*if(empty($dataForChart)){
-			echo "<script type=\"text/javascript\">
-			 alert(\"No stock detail record found for the given date. Please change the date range and try again.\");
-			  window.location = \"../StockAnalysis/index.php\"
-			  </script>"; 
-			  exit();
-		}	*/	
 		return array('ChartDetailData'=>$dataForChart,'CalcData'=>$dataForCalc,'SumOfPrice'=>$sumOfPrice,'maxPrice'=>$maxPrice,'maxPriceDate'=>$maxPriceDate,'minPrice'=>$minPrice,'minPriceDate'=>$minPriceDate);
 	}
 	
